@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vy Studio — 3D & Drönare i Stockholm</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #2D5F3F;
+            --green-light: #4A8B5C;
+            --green-bright: #6FCF97;
+            --black: #0A0A0A;
+            --gray: #333333;
+            --gray-light: #666666;
+            --white: #FAFAFA;
+            --accent: #E8F5E9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .serif {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 250, 250, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem 5%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(45, 95, 63, 0.1);
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--green);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            min-height: 90vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            background: var(--green);
+            color: var(--white);
+            padding: 8rem 5%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(111, 207, 151, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(74, 139, 92, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--green-bright);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 500px;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero-services {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+
+        .hero-service-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .hero-service-icon {
+            width: 8px;
+            height: 8px;
+            background: var(--green-bright);
+            border-radius: 50%;
+        }
+
+        .hero-service-text {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .hero-image {
+            position: relative;
+            overflow: hidden;
+            background: var(--black);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+            transition: transform 0.8s ease;
+        }
+
+        .hero-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .hero-image-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--white);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .hero-image-placeholder .serif {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styling */
+        section {
+            padding: 8rem 5%;
+        }
+
+        .section-header {
+            max-width: 1400px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-eyebrow {
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            max-width: 800px;
+        }
+
+        .section-description {
+            font-size: 1.15rem;
+            color: var(--gray-light);
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .service-card {
+            background: var(--white);
+            border: 2px solid rgba(45, 95, 63, 0.1);
+            padding: 3rem;
+            border-radius: 2px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--green);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover {
+            border-color: var(--green);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(45, 95, 63, 0.1);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--black);
+            font-weight: 700;
+        }
+
+        .service-card p {
+            color: var(--gray-light);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .service-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .service-features li::before {
+            content: '→';
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        /* Wedding Section */
+        .wedding-section {
+            background: var(--accent);
+            position: relative;
+        }
+
+        .wedding-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .wedding-image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .wedding-img {
+            aspect-ratio: 4/5;
+            background: var(--green);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .wedding-img::after {
+            display:	none;        
+        }
+
+        .wedding-img:nth-child(2) {
+            transform: translateY(3rem);
+        }
+
+        .wedding-details h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .wedding-details p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .wedding-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            border-left: 3px solid var(--green);
+            padding-left: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--green);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-light);
+            font-size: 0.95rem;
+        }
+
+        /* Process Section */
+        .process-section {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .process-steps {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 4rem;
+        }
+
+        .process-step {
+            position: relative;
+        }
+
+        .step-number {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--green);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .process-step h4 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .process-step p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+
+        /* About Section */
+        .about-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-intro {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            color: var(--gray);
+        }
+
+        .about-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .about-detail {
+            text-align: left;
+        }
+
+        .about-detail h4 {
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .about-detail p {
+            color: var(--gray-light);
+            line-height: 1.8;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .contact-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-content .section-title {
+            color: var(--white);
+            margin: 0 auto 2rem;
+        }
+
+        .contact-content .section-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0 auto 4rem;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-method {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            border-radius: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .contact-method:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .contact-method h4 {
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .contact-method a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--white);
+            color: var(--green);
+            padding: 1.2rem 3rem;
+            border-radius: 2px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .cta-button:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 3rem 5%;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer .logo {
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content {
+                padding: 5rem 5%;
+            }
+
+            .hero-image {
+                min-height: 400px;
+            }
+
+            .wedding-content {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+
+            .wedding-image-grid {
+                order: 2;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            section {
+                padding: 5rem 5%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .wedding-image-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wedding-img:nth-child(2) {
+                transform: none;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">Vy Studio</div>
+            <ul class="nav-links">
+                <li><a href="#tjanster">Tjänster</a></li>
+                <li><a href="#brollop">Bröllop</a></li>
+                <li><a href="#om">Om</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-eyebrow">Stockholm</div>
+            <h1>Kreativ produktion<br>från nya perspektiv</h1>
+            <p class="hero-description">
+                Vi kombinerar 3D-utskrift och professionell drönarvideografi för att skapa unika upplevelser och minnen.
+            </p>
+            <div class="hero-services">
+                <div class="hero-service-item">
+                    <div class="hero-service-icon"></div>
+                    <div class="hero-service-text">Personliga 3D-dekorationer</div>
+                </div>
+                <div class="hero-service-item">
+                    <div class="hero-service-icon"></div>
+                    <div class="hero-service-text">Bröllopsdrönare</div>
+                </div>
+                <div class="hero-service-item">
+                    <div class="hero-service-icon"></div>
+                    <div class="hero-service-text">Företagsvideografi</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <!-- Lägg din Stockholm-bild här! Ersätt src med sökvägen till din bild -->
+            <img src="drone-front.jpeg" alt="Flygvy över Stockholm" style="display: block;" id="hero-img">
+            <div class="hero-image-placeholder" id="placeholder">
+                <div class="serif">Flygvy över Stockholm</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tjanster">
+        <div class="section-header fade-in">
+            <div class="section-eyebrow">Vad vi gör</div>
+            <h2 class="section-title">Tjänster för särskilda tillfällen och professionella behov</h2>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <div class="service-icon">✦</div>
+                <h3>3D-utskrivna<br>bordsdekorationer</h3>
+                <p>Skräddarsydda namnskyltar och bordsplaceringar i olika material och typsnitt — perfekt för bröllop och event.</p>
+                <ul class="service-features">
+                    <li>Personliga namnskyltar</li>
+                    <li>Nyckelringar som minnesgåvor</li>
+                    <li>Olika material och färger</li>
+                    <li>Snabb leverans i Stockholm</li>
+                </ul>
+            </div>
+
+            <div class="service-card fade-in">
+                <div class="service-icon">◎</div>
+                <h3>Bröllops-<br>drönare</h3>
+                <p>Fånga bröllopsdagen och platsen från luften — vackra vyer och cineastiska klipp som kompletterar er berättelse.</p>
+                <ul class="service-features">
+                    <li>DJI Mini 5 Pro (4K HDR)</li>
+                    <li>Filmar venue före eller under</li>
+                    <li>Redigerade klipp levereras</li>
+                    <li>EASA-certifierad operatör</li>
+                </ul>
+            </div>
+
+            <div class="service-card fade-in">
+                <div class="service-icon">▲</div>
+                <h3>Företags & fastighets-<br>videografi</h3>
+                <p>Professionella luftbilder för mäklare, företag och marknadsföring — visar platser och fastigheter i sitt bästa ljus.</p>
+                <ul class="service-features">
+                    <li>Fastighetsmäklare</li>
+                    <li>Företagsdokumentation</li>
+                    <li>Marknadsföringsmaterial</li>
+                    <li>Verksam i hela Mälardalen</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="brollop" class="wedding-section">
+        <div class="wedding-content">
+            <div class="wedding-image-grid">
+                <div class="wedding-img"><img src="namnskylt.jpeg" alt="3D-utskrivna namnskyltar" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div class="wedding-img">
+                		<img src="sunset.jpeg" alt="Bröllopsvenue från luften" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            
+            <div class="wedding-details">
+                <div class="section-eyebrow">Specialisering</div>
+                <h3>Kompletta bröllopspaket</h3>
+                <p>
+                    Vi erbjuder allt från personliga bordsplaceringar till professionell drönarvideografi av bröllopsdagen. 
+                    Med hög kvalitet och personlig service hjälper vi er att skapa minnen som varar.
+                </p>
+                <p>
+                    Namnskyltar kan även göras om till nyckelringar som era gäster får ta med sig hem — 
+                    ett roligt och unikt minne från er stora dag.
+                </p>
+                
+                <div class="wedding-stats">
+                    <div class="stat">
+                        <div class="stat-number">24h</div>
+                        <div class="stat-label">Leveranstid inom Stockholm</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4K</div>
+                        <div class="stat-label">HDR videokvalitet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="process-section">
+        <div class="section-header fade-in">
+            <div class="section-eyebrow" style="color: var(--green-bright);">Processen</div>
+            <h2 class="section-title" style="color: var(--white);">Så här arbetar vi</h2>
+        </div>
+
+        <div class="process-steps">
+            <div class="process-step fade-in">
+                <div class="step-number">01</div>
+                <h4>Kontakt & offert</h4>
+                <p>Berätta om ditt event eller projekt. Vi diskuterar önskemål, datum och levererar en skräddarsydd offert.</p>
+            </div>
+
+            <div class="process-step fade-in">
+                <div class="step-number">02</div>
+                <h4>Design & godkännande</h4>
+                <p>För 3D-utskrifter skickar vi designförslag. För drönare planerar vi filmning och platser tillsammans med er.</p>
+            </div>
+
+            <div class="process-step fade-in">
+                <div class="step-number">03</div>
+                <h4>Produktion</h4>
+                <p>Vi skriver ut era dekorationer eller filmar med professionell utrustning. Allt hanteras med omsorg och precision.</p>
+            </div>
+
+            <div class="process-step fade-in">
+                <div class="step-number">04</div>
+                <h4>Leverans</h4>
+                <p>Utskrifter levereras inom 24–48h i Stockholm. Videomaterial redigeras och levereras inom en vecka.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="om">
+        <div class="about-content fade-in">
+            <div class="section-eyebrow">Om Vy Studio</div>
+            <h2 class="section-title">Kreativitet möter teknik</h2>
+            <p class="about-intro">
+                Baserat på Södermalm i Stockholm kombinerar vi passion för teknik och design. 
+                Med professionell utrustning och personlig service skapar vi unika lösningar för bröllop, event och företag.
+            </p>
+
+            <div class="about-details">
+                <div class="about-detail">
+                    <h4>Utrustning</h4>
+                    <p>Bambu Lab A1 Mini 3D-skrivare och DJI Mini 5 Pro drönare med 4K HDR-inspelning.</p>
+                </div>
+                <div class="about-detail">
+                    <h4>Plats</h4>
+                    <p>Södermalm, Stockholm. Vi arbetar i hela Mälardalen och tar uppdrag över hela regionen.</p>
+                </div>
+                <div class="about-detail">
+                    <h4>Certifiering</h4>
+                    <p>EASA-registrerad operatör med alla nödvändiga tillstånd för kommersiell drönarvideografi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="kontakt" class="contact-section">
+        <div class="contact-content">
+            <h2 class="section-title">Låt oss skapa något tillsammans</h2>
+            <p class="section-description">
+                Kontakta oss för offert, frågor eller för att diskutera ditt projekt. 
+                Vi svarar vanligtvis inom ett par timmar.
+            </p>
+
+            <div class="contact-methods">
+                <div class="contact-method">
+                    <h4>E-post</h4>
+                    <a href="mailto:arvid@lindelof.org">arvid@lindelof.org</a>
+                </div>
+                <div class="contact-method">
+                    <h4>Telefon</h4>
+                    <a href="tel:+46793495749">+46 79 349 57 49</a>
+                </div>
+                <div class="contact-method">
+                    <h4>Plats</h4>
+                    <a>Södermalm, Stockholm</a>
+                </div>
+            </div>
+
+            
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo">Vy Studio</div>
+        <p>© 2025 Vy Studio — 3D & Drönare i Stockholm</p>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Check if image exists
+        const img = document.getElementById('hero-img');
+        const placeholder = document.getElementById('placeholder');
+        
+        img.onload = function() {
+            img.style.display = 'block';
+            placeholder.style.display = 'none';
+        };
+        
+        img.onerror = function() {
+            img.style.display = 'none';
+            placeholder.style.display = 'block';
+        };
+        
+        // Try to load the image
+     
+    </script>
+</body>
+</html>
